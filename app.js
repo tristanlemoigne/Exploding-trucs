@@ -66,6 +66,11 @@ class App {
     }
 }
 
-// UTILS : TIME, PROGRESS, POSiTION, ROTATION, DIRECTION
 // DECLARATIONS
 new App().init()
+
+// UTILS : TIME, PROGRESS, POSiTION, ROTATION, DIRECTION
+// https://tympanus.net/codrops/2019/03/26/exploding-3d-objects-with-three-js/
+
+// position = rotate(position);
+// position += position + direction*progress;
