@@ -1,17 +1,15 @@
+const vertex = `
 uniform float time;
 uniform float progress;
 uniform float inside;
-
-
 
 attribute vec3 centroid;
 attribute vec3 axis;
 attribute float offset;
 
-varying vec3 eye;
-varying vec3 vNormal;
-varying vec3 vReflect;
-
+//varying vec3 eye;
+// varying vec3 vNormal;
+//varying vec3 vReflect;
 
 mat4 rotationMatrix(vec3 axis, float angle) {
     axis = normalize(axis);
@@ -47,21 +45,21 @@ float easeOut(float t){
 
 void main() {
 
+
   vec3 newposition = position;
 
-  float vTemp =  1. - (centroid.y + 100.)/200.;
+  float vTemp =  1. - ((centroid.x + centroid.y)*0.5 + 1.)/2.;
 
-  float tProgress = max(0.0, (progress - vTemp*0.0) /1.);
-
+  float tProgress = max(0.0, (progress - vTemp*0.4) /0.6);
   vec3 newnormal = rotate(normal,axis,tProgress*(3. + offset*10.));
-  vNormal = newnormal;
+//   vNormal = newnormal;
 
-  newposition += newposition + centroid*(tProgress)*(30.);
+  newposition += newposition + centroid*(tProgress)*(3. + offset*7.);
 
-  eye = normalize( vec3( modelViewMatrix * vec4( newposition, 1.0 ) ) );
+  //eye = normalize( vec3( modelViewMatrix * vec4( newposition, 1.0 ) ) );
   vec4 worldPosition = modelMatrix * vec4( newposition, 1.0 );
   vec3 worldNormal = normalize( mat3( modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz ) * newnormal );
   vec3 I = worldPosition.xyz - cameraPosition;
-  vReflect = reflect( I, worldNormal );
+  //vReflect = reflect( I, worldNormal );
   gl_Position = projectionMatrix * modelViewMatrix * vec4( newposition, 1.0 );
-}
+}`
