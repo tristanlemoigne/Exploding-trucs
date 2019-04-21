@@ -18,6 +18,8 @@ class App {
         })
         this.renderer.setPixelRatio(window.devicePixelRatio)
         this.renderer.setSize(window.innerWidth, window.innerHeight)
+        // console.log(this.renderer)
+        this.renderer.physicallyCorrectLights = true
 
         // Scene
         this.scene = new THREE.Scene()
@@ -43,7 +45,7 @@ class App {
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.4)
         this.scene.add(ambientLight)
 
-        const spotLight = new THREE.SpotLight(0xffffff, 2)
+        const spotLight = new THREE.SpotLight(0xffffff, 15, 0, 2)
         spotLight.position.z = 5
         spotLight.position.y = 5
         this.scene.add(spotLight)
@@ -60,8 +62,8 @@ class App {
     }
 
     update() {
-        this.time += 0.01
-        let progress = Math.sin(this.time) /50
+        this.time += 0.02
+        let progress = Math.sin(this.time) / 30
         
         this.model.children.forEach(child => {
             let direction = child.position.clone().sub(this.model.position).normalize()
