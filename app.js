@@ -18,7 +18,6 @@ class App {
         })
         this.renderer.setPixelRatio(window.devicePixelRatio)
         this.renderer.setSize(window.innerWidth, window.innerHeight)
-        // console.log(this.renderer)
         this.renderer.physicallyCorrectLights = true
 
         // Scene
@@ -31,7 +30,7 @@ class App {
             0.1,
             1000
         )
-        this.camera.position.set(2, 5, 10)
+        this.camera.position.set(10, 10, 20)
         
         // Controls
         this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement)
@@ -39,7 +38,7 @@ class App {
 
         // Helpers
         const axesHelpers = new THREE.AxesHelper(5)
-        this.scene.add(axesHelpers)
+        // this.scene.add(axesHelpers)
 
         // Lights
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.4)
@@ -63,14 +62,20 @@ class App {
 
     update() {
         this.time += 0.02
-        let progress = Math.sin(this.time) / 30
+        let progress = Math.sin(this.time) / 150
         
-        this.model.children.forEach(child => {
+        this.model.children.forEach((child, index) => {
+            // Position
             let direction = child.position.clone().sub(this.model.position).normalize()
-            let newPos = child.position.add(direction.multiplyScalar(progress))
-    
-            child.position.copy(newPos)
+            child.position.add(direction.multiplyScalar(progress * index/5))
+            // child.position.add(direction.multiplyScalar(progress))
+
+            // Rotation
+            let rotate = (Math.sin(this.time - Math.PI/2) * 1/2 + 1/2 ) * index / this.model.children.length
+            child.rotation.set(rotate * child.position.x, rotate * child.position.y, rotate * child.position.z)
         })
+
+        this.model.rotation.y = -this.time/2
 
         this.renderer.render(this.scene, this.camera)
         requestAnimationFrame(this.update.bind(this));
