@@ -43,7 +43,7 @@ class App {
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.4)
         this.scene.add(ambientLight)
 
-        const spotLight = new THREE.SpotLight(0xffffff)
+        const spotLight = new THREE.SpotLight(0xffffff, 2)
         spotLight.position.z = 5
         spotLight.position.y = 5
         this.scene.add(spotLight)
@@ -53,7 +53,6 @@ class App {
         loader.load("./assets/torus.glb", gltf => {
             this.model = gltf.scene
             this.scene.add(this.model)
-            console.log(this.model)
 
              // Animations
             this.update()
@@ -61,8 +60,18 @@ class App {
     }
 
     update() {
-        requestAnimationFrame(this.update.bind(this));
+        this.time += 0.01
+        let progress = Math.sin(this.time) /50
+        
+        this.model.children.forEach(child => {
+            let direction = child.position.clone().sub(this.model.position).normalize()
+            let newPos = child.position.add(direction.multiplyScalar(progress))
+    
+            child.position.copy(newPos)
+        })
+
         this.renderer.render(this.scene, this.camera)
+        requestAnimationFrame(this.update.bind(this));
     }
 }
 
